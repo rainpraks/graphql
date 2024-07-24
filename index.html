@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Page</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="login">
+        <h2>Login</h2>
+        <input type="text" id="username" placeholder="Username or Email">
+        <input id="password" placeholder="Password">
+        <button onclick="login()">Login</button>
+        <div id="loginError"></div>
+    </div>
+    <div id="profile" style="display:none;">
+        <h1>Profile</h1>
+        <div id="userInfo"></div>
+        <div id="charts">
+            <h2>XP Earned by Project</h2>
+            <div id="xpChart"></div>
+            <h2>PASS and FAIL Ratio</h2>
+            <div id="ratioChart"></div>
+        </div>
+        <button onclick="logout()">Logout</button>
+    </div>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
