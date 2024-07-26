@@ -1,6 +1,27 @@
 const graphqlEndpoint = 'https://01.kood.tech/api/graphql-engine/v1/graphql';
 let jwtToken = '';
 
+function setCookie(name, value) {
+    document.cookie = `${name}=${value};path=/`;
+}
+
+function getCookie(name) {
+    const cname = `${name}=`;
+    const decodedCookie = decodeURIComponent(document.cookie);
+    const ca = decodedCookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i].trim();
+        if (c.indexOf(cname) == 0) {
+            return c.substring(cname.length, c.length);
+        }
+    }
+    return "";
+}
+
+function deleteCookie(name) {
+    document.cookie = `${name}=;path=/;expires=Thu, 01 Jan 1970 00:00:01 GMT`;
+}
+
 function login() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
@@ -16,6 +37,7 @@ function login() {
         console.log('loginResponse:', data)
         if (data) {
             jwtToken = data;
+            setCookie('jwtToken', jwtToken)
             document.getElementById('login').style.display = 'none';
             document.getElementById('profile').style.display = 'block';
             fetchProfileData();
@@ -31,10 +53,10 @@ function login() {
 
 function logout() {
     jwtToken = '';
+    deleteCookie('jwtToken');
     document.getElementById('login').style.display = 'block';
     document.getElementById('profile').style.display = 'none';
 }
-
 
 function fetchProfileData() {
     const query = `
@@ -75,19 +97,27 @@ function fetchProfileData() {
 
 function fetchXP() {
     const query = `
-     {  
+    {
         transaction(
             where: {type: {_eq: "xp"}, object: {type: {_eq: "project"}}},
             order_by: {createdAt: desc},
-        ) {
-            amount
-            object {
+            ) {
+                amount
+                object {
                 name
+                }
+                createdAt
+                user { # Nested query to get user details
+                id
+                login
+                email
+                firstName
+                lastName
             }
-            createdAt
         }
     }
     `;
+
 
     fetch(graphqlEndpoint, {
         method: 'POST',

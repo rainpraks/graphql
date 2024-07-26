@@ -8,7 +8,7 @@ body {
 }
 
 #login, #profile {
-    max-width: 600px;
+    max-width: 1000px;
     width: 100%;
     padding: 20px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
@@ -17,12 +17,49 @@ body {
 
 input {
     display: block;
-    width: calc(100% - 22px);
+    width: 250px;
     margin: 10px 0;
     padding: 10px;
 }
 
 button {
     padding: 10px 20px;
+    cursor: pointer;
+}
+
+#header {
+    background-color: grey; 
+    color: white;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#userInfo {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+#logoutButton {
+    background-color: #f44336;
+    color: white;
+    border: none;
+}
+
+#charts {
+    margin-top: 20px;
+}
+
+#xpChartContainer {
+    overflow-x: auto;
+}
+
+#xpChart {
+    min-width: 1000px;
+}
+
+h2 {
+    margin-top: 20px;
 }
 
