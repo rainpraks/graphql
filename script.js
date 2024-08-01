@@ -1,27 +1,6 @@
 const graphqlEndpoint = 'https://01.kood.tech/api/graphql-engine/v1/graphql';
 let jwtToken = '';
 
-function setCookie(name, value) {
-    document.cookie = `${name}=${value};path=/`;
-}
-
-function getCookie(name) {
-    const cname = `${name}=`;
-    const decodedCookie = decodeURIComponent(document.cookie);
-    const ca = decodedCookie.split(';');
-    for (let i = 0; i < ca.length; i++) {
-        let c = ca[i].trim();
-        if (c.indexOf(cname) == 0) {
-            return c.substring(cname.length, c.length);
-        }
-    }
-    return "";
-}
-
-function deleteCookie(name) {
-    document.cookie = `${name}=;path=/;expires=Thu, 01 Jan 1970 00:00:01 GMT`;
-}
-
 function login() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
@@ -32,12 +11,18 @@ function login() {
             'Authorization': 'Basic ' + btoa(`${username}:${password}`)
         }
     })
-    .then(response => response.json())
+
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Invalid credentials');
+        }
+        return response.json();
+    })
     .then(data => {
         console.log('loginResponse:', data)
         if (data) {
             jwtToken = data;
-            setCookie('jwtToken', jwtToken)
+            Cookies.set('jwtToken', jwtToken, {expires: 1 });
             document.getElementById('login').style.display = 'none';
             document.getElementById('profile').style.display = 'block';
             fetchProfileData();
@@ -53,12 +38,19 @@ function login() {
 
 function logout() {
     jwtToken = '';
-    deleteCookie('jwtToken');
+    Cookies.remove('jwtToken');
     document.getElementById('login').style.display = 'block';
     document.getElementById('profile').style.display = 'none';
 }
 
 function fetchProfileData() {
+    jwtToken = Cookies.get('jwtToken');
+
+    if (!jwtToken) {
+        document.getElementById('loginError').innerText = 'Please login again';
+        return
+    }
+
     const query = `
     query {
         user {
