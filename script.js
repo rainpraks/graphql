@@ -1,6 +1,15 @@
 const graphqlEndpoint = 'https://01.kood.tech/api/graphql-engine/v1/graphql';
 let jwtToken = '';
 
+document.addEventListener('DOMContentLoaded', (event) => {
+    jwtToken = Cookies.get('jwtToken');
+    if (jwtToken) {
+        document.getElementById('login').style.display = 'none';
+        document.getElementById('profile').style.display = 'block';
+        fetchProfileData();
+    }
+});
+
 function login() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
