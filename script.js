@@ -175,7 +175,7 @@ function renderXPChart(xpData) {
     // Set up the SVG container dimensions
     const margin = { top: 20, right: 30, bottom: 40, left: 60 };
     const width = 800 - margin.left - margin.right;
-    const height = 500 - margin.top - margin.bottom;
+    const height = 600 - margin.top - margin.bottom;
 
     const svg = d3.select("#xpChart").append("svg")
         .attr("width", width + margin.left + margin.right)
